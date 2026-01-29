@@ -1,0 +1,42 @@
+name: News Automation
+
+# 毎日午前9時（JST）に実行、または手動実行可能
+on:
+  schedule:
+    - cron: '0 0 * * *'  # UTC 00:00 = JST 09:00
+  workflow_dispatch:  # 手動実行を許可
+
+jobs:
+  generate-news:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # リポジトリへの書き込み権限
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Generate news HTML
+        env:
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: |
+          python scripts/generate_news.py
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update news: $(date +'%Y-%m-%d %H:%M:%S')"
+          git push

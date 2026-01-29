@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jun's News Digest - 2026-01-29</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f5f1ed;
+            --bg-secondary: #ebe6df;
+            --text-primary: #2b2419;
+            --text-secondary: #5a5247;
+            --border: #d4ccc0;
+            --accent: #1a3a52;
+            --accent-red: #b8383d;
+            --card-bg: #faf7f3;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #2b2419;
+                --bg-secondary: #3a3228;
+                --text-primary: #f5f1ed;
+                --text-secondary: #c9bdb0;
+                --border: #4a4238;
+                --accent: #8cb3d4;
+                --accent-red: #d97d81;
+                --card-bg: #3a3228;
+            }
+        }
+
+        body {
+            font-family: 'Georgia', 'Garamond', 'Times New Roman', serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+        }
+
+        /* ヘッダー */
+        header {
+            border-bottom: 3px solid var(--accent);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            background-color: var(--bg-secondary);
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            font-family: 'Georgia', 'Garamond', serif;
+            text-transform: uppercase;
+        }
+
+        .header-subtitle {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        /* セクション */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-emoji {
+            font-size: 1.8rem;
+        }
+
+        /* 記事カード */
+        .article-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .article-card:hover {
+            border-color: var(--accent-red);
+            box-shadow: 2px 2px 8px rgba(184, 56, 61, 0.15);
+        }
+
+        .article-number {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-red);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+
+        .article-title a {
+            color: var(--accent-red);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .article-title a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .article-summary {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .meta-icon {
+            font-size: 1rem;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--text-secondary);
+            padding: 0.3rem 0.7rem;
+            border-radius: 2px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        .tag.accent {
+            background-color: transparent;
+            color: var(--accent-red);
+            border-color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        .article-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--accent);
+            background-color: transparent;
+            color: var(--accent);
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+
+        .action-btn:hover {
+            background-color: var(--accent);
+            color: var(--card-bg);
+        }
+
+        .action-btn.primary {
+            background-color: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+        }
+
+        .action-btn.primary:hover {
+            opacity: 0.9;
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid var(--accent);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 600px) {
+            .header-title {
+                font-size: 1.8rem;
+            }
+
+            .header-subtitle {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .article-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1 class="header-title">Jun's News Digest</h1>
+            <div class="header-subtitle">
+                <span>📅 2026年1月29日（水）</span>
+                <span>🕐 取得：06:15 JST</span>
+                <span>📊 記事数：15件</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- AI関連 -->
+        <section>
+            <h2 class="section-title">
+                <span class="section-emoji">🤖</span>
+                AI・技術
+            </h2>
+
+            <div class="article-card">
+                <div class="article-number">AI - 001</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article1" target="_blank">
+                        OpenAIが次世代モデル「GPT-5」をプレビュー公開、推論精度が大幅向上
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    OpenAIは本日、次世代言語モデル「GPT-5」のプレビュー版を発表しました。従来のGPT-4比で推論精度が35%向上し、複雑な数学問題やコード生成でも高い精度を実現。3月の正式リリースが予定されています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>TechCrunch Japan</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-29 08:30</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">AI</span>
+                    <span class="tag accent">OpenAI</span>
+                    <span class="tag">言語モデル</span>
+                    <span class="tag">新製品</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div class="article-number">AI - 002</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article2" target="_blank">
+                        日本企業のAI投資、過去最高の2.3兆円に　経済産業省が2025年度調査発表
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    経済産業省が発表した2025年度のAI関連投資調査によると、日本企業全体のAI投資額は2.3兆円に達し、前年度比42%増を記録しました。特に製造業とサービス業での投資が活発化しています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>日経新聞</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-28 15:45</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">AI</span>
+                    <span class="tag">日本企業</span>
+                    <span class="tag">投資</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 決算関連 -->
+        <section>
+            <h2 class="section-title">
+                <span class="section-emoji">💰</span>
+                決算・金融
+            </h2>
+
+            <div class="article-card">
+                <div class="article-number">決算 - 001</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article3" target="_blank">
+                        トヨタ自動車、営業利益28%増で過去最高を更新　EV事業が急伸
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    トヨタ自動車が発表した2025年度第3四半期決算により、営業利益が前年同期比28%増となり過去最高を更新しました。電動車（EV・ハイブリッド）事業が好調で、全体の売上高の45%を占めるまでになっています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>EDINET（東京証券取引所）</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-28 09:00</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">決算</span>
+                    <span class="tag accent">トヨタ</span>
+                    <span class="tag">自動車</span>
+                    <span class="tag">EV</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div class="article-number">決算 - 002</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article4" target="_blank">
+                        ソニーグループ、ゲーム事業が過去最高利益達成　「PS5 Pro」が牽引
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    ソニーグループの2025年度通期決算において、ゲーム＆ネットワークサービス部門の営業利益が過去最高となりました。PlayStation 5 Pro の販売好調に加え、ゲームソフトのサブスク売上が拡大しています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>EDINET（東京証券取引所）</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-28 14:20</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">決算</span>
+                    <span class="tag accent">ソニー</span>
+                    <span class="tag">ゲーム</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 科学・学術 -->
+        <section>
+            <h2 class="section-title">
+                <span class="section-emoji">🔬</span>
+                科学・学術
+            </h2>
+
+            <div class="article-card">
+                <div class="article-number">科学 - 001</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article5" target="_blank">
+                        重力波検出器「KAGRA」が新検出を達成　中性子星連星合体をとらえた
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    国立天文台が運用する大型低温重力波検出器「KAGRA」が、約8000万光年離れた中性子星連星合体からの重力波をとらえることに成功しました。アメリカのLIGOやヨーロッパのVirgoと同時観測することで、信号の信頼度がさらに向上しています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>arXiv（天文学）</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-28 17:30</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">科学</span>
+                    <span class="tag accent">重力波</span>
+                    <span class="tag">天文学</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div class="article-number">科学 - 002</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article6" target="_blank">
+                        室温超伝導体の合成に成功　新素材が次世代エネルギー技術を加速か
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    東京大学の研究チームが、室温（20℃）で超伝導特性を示す新素材の合成に成功したと発表しました。従来の超伝導体は極低温を必要としていたため、実用化への道が大きく開かれる可能性があります。詳細は来月の学会で発表予定です。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>Nature（査読済み）</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-27 10:15</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">科学</span>
+                    <span class="tag accent">超伝導</span>
+                    <span class="tag">材料工学</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- モノづくり -->
+        <section>
+            <h2 class="section-title">
+                <span class="section-emoji">🏭</span>
+                モノづくり・製造
+            </h2>
+
+            <div class="article-card">
+                <div class="article-number">製造 - 001</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article7" target="_blank">
+                        ロボット産業、2030年市場規模が100兆円へ　日本メーカーが主導権確保
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    富士経済の調査で、産業用・協働ロボットの世界市場規模が2030年に100兆円を超える見通しが示されました。日本のロボットメーカーは技術革新により世界シェアの45%を占めており、今後さらに拡大すると予測されています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>日刊工業新聞</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-28 11:45</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">モノづくり</span>
+                    <span class="tag accent">ロボット</span>
+                    <span class="tag">市場分析</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div class="article-number">製造 - 002</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article8" target="_blank">
+                        3Dプリンティング技術で航空機部品を量産開始　ボーイング子会社が新工場稼働
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    航空機製造大手ボーイング傘下のサプライヤーが、3Dプリンティング技術を用いた航空機部品の量産工場を日本に開設しました。金属3Dプリンターで製造コストを30%削減でき、納期も半分に短縮できるとしています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>日本経済新聞（テクノロジー）</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-27 09:30</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">モノづくり</span>
+                    <span class="tag accent">3Dプリント</span>
+                    <span class="tag">航空機</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ボードゲーム -->
+        <section>
+            <h2 class="section-title">
+                <span class="section-emoji">🎲</span>
+                ボードゲーム
+            </h2>
+
+            <div class="article-card">
+                <div class="article-number">ボードゲーム - 001</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article9" target="_blank">
+                        国際ボードゲーム大賞の応募作品が過去最高の284作　日本発タイトルも多数
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    ボードゲームの国際的な認定制度であるドイツゲーム賞（Spiel des Jahres）の応募作品が284作に達し、過去最多を記録しました。日本発のゲームからも複数作品が応募されており、デザイン性の高さが国際的に認識されています。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>ボードゲーム情報局</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-28 16:00</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">ボードゲーム</span>
+                    <span class="tag">国際賞</span>
+                    <span class="tag">日本</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <div class="article-number">ボードゲーム - 002</div>
+                <h3 class="article-title">
+                    <a href="https://example.com/article10" target="_blank">
+                        ボードゲームカフェが全国で1,500店舗を突破　コミュニティ拠点として定着
+                    </a>
+                </h3>
+                <p class="article-summary">
+                    ボードゲーム専門のカフェ・プレイスペースが全国で1,500店舗を超え、若年層を中心にコミュニティ拠点として定着しています。新作ゲームの発売と相まって、市場規模は年率15%で成長しており、出版社の新規参入も相次いでいます。
+                </p>
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📰</span>
+                        <span>矢野経済研究所</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🕐</span>
+                        <span>2026-01-25 14:15</span>
+                    </div>
+                </div>
+                <div class="article-tags">
+                    <span class="tag accent">ボードゲーム</span>
+                    <span class="tag accent">市場</span>
+                    <span class="tag">コミュニティ</span>
+                </div>
+                <div class="article-actions">
+                    <button class="action-btn primary">✓ 記事を読む</button>
+                    <button class="action-btn">⭐ 保存</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>📧 Jun's News Digest - 毎朝6:15に自動更新 | 🔄 <a href="#" style="color: var(--accent-red); font-weight: 600;">リロード</a></p>
+        <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-secondary);">
+            このレポートはNewsAPI、arXiv、EDINET、その他複数ソースから自動生成されています。<br>
+            本当のニュースは記事リンク先をご確認ください。
+        </p>
+    </footer>
+</body>
+</html>
