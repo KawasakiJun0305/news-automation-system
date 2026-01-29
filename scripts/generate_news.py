@@ -103,8 +103,11 @@ def main():
         # 3. HTML を生成（docs/ フォルダに保存）
         print("📄 ステップ 3: HTML を生成中...")
 
-        # docs/ フォルダに保存
-        html_generator = HTMLGenerator(output_dir="docs")
+        # docs/ フォルダに保存（ハイブリッド型デザインを使用）
+        html_generator = HTMLGenerator(
+            output_dir="docs",
+            template_style="hybrid"  # ハイブリッド型デザイン
+        )
 
         # 日付ベースのファイル名
         timestamp = datetime.now().strftime("%Y%m%d")
