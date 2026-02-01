@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Daily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* ヘッダー */
+        header {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .masthead {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            text-align: center;
+        }
+
+        .masthead h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .masthead .date-info {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        /* メインコンテンツ */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ヒーロー記事 */
+        .hero-article {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .hero-article:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-article:hover .hero-image {
+            transform: scale(1.03);
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+
+        .hero-content {
+            padding: 40px;
+        }
+
+        .hero-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #2c3e50;
+        }
+
+        .hero-content h2 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .hero-content h2 a:hover {
+            color: #3498db;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+
+        .hero-summary {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .hero-read-more {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .hero-read-more:hover {
+            background: #2980b9;
+            transform: translateX(5px);
+        }
+
+        /* カードグリッド */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            flex-grow: 0;
+        }
+
+        .card h3 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .card h3 a:hover {
+            color: #3498db;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+
+        .card-summary {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .card-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .card-link:hover {
+            color: #2980b9;
+        }
+
+        /* フッター */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            margin-top: 80px;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+            }
+
+            .hero-image-container {
+                height: 300px;
+            }
+
+            .hero-content {
+                padding: 25px;
+            }
+
+            .hero-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-image-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="masthead">
+            <h1>AI News Daily</h1>
+            <div class="date-info">
+                2026年02月01日 02:51 | 総記事数: 19
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- ヒーロー記事（1件目のみ） -->
+        <article class="hero-article">
+            <div class="hero-image-container">
+                
+                <div class="hero-placeholder">📰</div>
+                
+            </div>
+            <div class="hero-content">
+                <h2><a href="https://pypi.org/project/perplexity-webui-scraper/0.4.0/" target="_blank">perplexity-webui-scraper 0.4.0</a></h2>
+                <div class="hero-meta">
+                    <span>📰 Pypi.org</span>
+                    <span>📅 2026-01-31 02:49</span>
+                    <span>🌐 EN</span>
+                </div>
+                
+                <p class="hero-summary"><strong>要約:</strong> **要約：**
+
+PerplexityのウェブインターフェースからAI応答を抽出するPythonスクレイパー「perplexity-webui-scraper」のバージョン0.4.0がリリースされました。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、または広告ブロッカーが原因の可能性があるため、接続確認や設定の見直しが推奨されています。</p>
+                
+                
+                <p class="hero-description">Python scraper to extract AI responses from Perplexity's web interface.</p>
+                
+                <a href="https://pypi.org/project/perplexity-webui-scraper/0.4.0/" target="_blank" class="hero-read-more">続きを読む →</a>
+            </div>
+        </article>
+        
+
+        <!-- その他の記事（カードグリッド） -->
+        <div class="cards-grid">
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://www.yankodesign.com/images/design_news/2026/01/meta-misread-the-future-twice-now-theyre-sitting-on-a-golden-egg-but-dont-know-it/meta_missed_the_future_twice_1.jpeg" alt="Meta Misread the Future Twice. Now They’re Sitting on a Golden Egg, But Don’t Know It" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.yankodesign.com/2026/01/30/meta-misread-the-future-twice-now-theyre-sitting-on-a-golden-egg-but-dont-know-it/" target="_blank">Meta Misread the Future Twice. Now They’re Sitting on a Golden Egg, But Don’t Know It</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Yanko Design</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+マーク・ザッカーバーグは2021年10月に仮想現実が未来だと信じて社名をMetaに変更したが、その判断は誤りだった。記事は、Metaが二度にわたって未来を読み違えたものの、現在は自社が気づいていない貴重な資産（「黄金の卵」...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.yankodesign.com/2026/01/30/meta-misread-the-future-twice-now-theyre-sitting-on-a-golden-egg-but-dont-know-it/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://ichef.bbci.co.uk/news/1024/branded_news/0d72/live/38ec35b0-fd0a-11f0-833e-6bf0186607ca.jpg" alt="'I spoke to ChatGPT 8 times a day' - Gen Z's loneliness 'crisis'" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.bbc.com/news/articles/cg4ewrw2drpo" target="_blank">'I spoke to ChatGPT 8 times a day' - Gen Z's loneliness 'crisis'</a></h3>
+                    <div class="card-meta">
+                        <span>📰 BBC News</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Z世代の若者の間で、社交能力の低下により、AIチャットボットを「代替友人」として利用する現象が増加しています。ある利用者は1日8回ChatGPTと会話するなど、孤独感の「危機」とも呼べる状況が報告されています。専門家は、実際の人間関係では異...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.bbc.com/news/articles/cg4ewrw2drpo" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agenttinman/0.1.60/" target="_blank">AgentTinman 0.1.60</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AgentTinman 0.1.60は、AIシステムの障害発見を目的とした前方展開型研究エージェントです。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が原因の可能性が...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agenttinman/0.1.60/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://ewscripps.brightspotcdn.com/dims4/default/81c279a/2147483647/strip/true/crop/1280x672+0+24/resize/1200x630!/quality/90/?url=https%3A%2F%2Fcf.cdn.uplynk.com%2Fause1%2Fslices%2Fba7%2F790551469ef2448fbb6dfa541303db12%2Fba7f5d33832d42bfa58f4a3666df77eb%2Fposter_3757210257464ece8aac9599d67f65ed.jpg" alt="ICE detains Chula Vista parents after school drop-off" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.10news.com/news/local-news/ice-detains-chula-vista-parents-after-school-drop-off-leaving-2-children-in-care-of-family-friend" target="_blank">ICE detains Chula Vista parents after school drop-off</a></h3>
+                    <div class="card-meta">
+                        <span>📰 10News</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+カリフォルニア州チュラビスタで、両親が子供を学校に送った直後に移民税関執行局（ICE）に拘束されました。2人の幼い子供たちは現在、家族の友人に預けられています。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.10news.com/news/local-news/ice-detains-chula-vista-parents-after-school-drop-off-leaving-2-children-in-care-of-family-friend" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://image.news.livedoor.com/newsimage/stf/4/f/4fbbe_88_3068b1cf2588b198b2fa68db8f6c4cc0.jpg" alt="Googleが世界モデルの「Project Genie」を発表した直後にゲーム企業の株価が軒並み下落" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://news.livedoor.com/article/detail/30484499/" target="_blank">Googleが世界モデルの「Project Genie」を発表した直後にゲーム企業の株価が軒並み下落</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Livedoor.com</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Googleが文章から3D仮想環境を生成できるAIモデル「Project Genie」を発表した直後、ゲーム関連企業の株価が一斉に下落しました。このAI技術により、ゲーム開発が簡易化される可能性があることから、既存のゲーム企業のビジネスモデ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://news.livedoor.com/article/detail/30484499/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/x-ipe/1.0.22/" target="_blank">x-ipe 1.0.22</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> この記事は技術的な内容を含んでいますが、本文が不完全で詳細が確認できません。X-IPE 1.0.22というAI駆動の開発フレームワークに関するものですが、サイトの読み込みエラーにより、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定の...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/x-ipe/1.0.22/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/mashell/0.1.5/" target="_blank">mashell 0.1.5</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+mashell 0.1.5は、AIを活用したコマンドライン支援ツールで、あらゆるモデルをどこでも利用できることが特徴です。ただし、サイトの一部が読み込めない問題が報告されており、ブラウザ拡張機能やネットワーク設定の確認が推...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/mashell/0.1.5/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/zipline-ai/2025.12.22/" target="_blank">zipline-ai 2025.12.22</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Zipline AIプラットフォーム向けのCLIツール「zipline-ai 2025.12.22」がリリースされました。サイトの必須コンポーネントが読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、また...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/zipline-ai/2025.12.22/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static.toiimg.com/thumb/msid-127809184,width-1280,height-720,imgsize-56726,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg" alt="Joint bloc of BJP, Sena BMC netas may be registered on Monday" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://timesofindia.indiatimes.com/city/mumbai/joint-bloc-of-bjp-sena-bmc-netas-may-be-registered-on-monday/articleshow/127809185.cms" target="_blank">Joint bloc of BJP, Sena BMC netas may be registered on Monday</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+ムンバイで、BJPとシブ・セーナーがBMC（市公社）の議員グループを月曜日にコンカン地区委員会事務所に共同登録する見込みです。両党は市議会での協力体制を正式化する動きを進めています。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://timesofindia.indiatimes.com/city/mumbai/joint-bloc-of-bjp-sena-bmc-netas-may-be-registered-on-monday/articleshow/127809185.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static.toiimg.com/thumb/msid-127812983,width-1280,height-720,imgsize-1278755,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg" alt="Earth is not a chessboard" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://timesofindia.indiatimes.com/world/mind-field/earth-is-not-a-chessboard/articleshow/127812960.cms" target="_blank">Earth is not a chessboard</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> この記事は、地政学的な領土・資源競争が気候変動を加速させ、国際的な気候対策協力を妨げていると指摘しています。軍事産業や化石燃料産業の活動が環境問題をさらに悪化させているとしています。タイトル「地球はチェス盤ではない」は、国家間の戦略的競争よ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://timesofindia.indiatimes.com/world/mind-field/earth-is-not-a-chessboard/articleshow/127812960.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://i.cbc.ca/ais/1e02b396-b6a3-4499-8b2b-66178366765e,1769814973971/full/max/0/default.jpg?im=Crop%2Crect%3D%280%2C0%2C1920%2C1080%29%3BResize%3D620" alt="AI, data centre companies will have to compete for electricity in B.C." class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.cbc.ca/news/canada/british-columbia/ai-data-centres-competitive-bid-process-bc-9.7069103" target="_blank">AI, data centre companies will have to compete for electricity in B.C.</a></h3>
+                    <div class="card-meta">
+                        <span>📰 CBC News</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約:**
+
+ブリティッシュコロンビア州の新しい州法により、データセンターやAI企業はBC Hydroからの電力供給を競争入札で獲得しなければならなくなりました。この措置は、電力需要が急増するデータセンターやAI企業に対し、限られた電力...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.cbc.ca/news/canada/british-columbia/ai-data-centres-competitive-bid-process-bc-9.7069103" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agentindex/1.0.0/" target="_blank">agentindex 1.0.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Agent Index 1.0.0は、x402 AIエージェント向けの検索レイヤーを提供する公式Python SDKです。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agentindex/1.0.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agentindex/" target="_blank">agentindex added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Agent Index の公式Python SDKが PyPI に追加されました。このSDKは、x402 AIエージェントの検索レイヤーとして機能します。ただし、記事本文はサイトの読み込みエラーにより完全には表示されていま...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agentindex/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://c.ndtvimg.com/2025-12/kuna5f1o_delhi-pollution-_625x300_18_December_25.jpg?im=FitAndFill,algorithm=dnn,width=1080,height=607" alt="Delhi: With Average AQI Of 307, 2026 Sees Second-Best January In Five Years" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.ndtvprofit.com/india/delhi-with-average-aqi-of-307-2026-sees-second-best-january-in-five-years-10917609" target="_blank">Delhi: With Average AQI Of 307, 2026 Sees Second-Best January In Five Years</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Ndtvprofit.com</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> デリーの2024年1月の平均大気質指数（AQI）は307を記録し、過去5年間で2番目に良好な1月となりました。これは昨年同期の306とほぼ同水準ですが、わずかに悪化しています。なお、1月31日は「非常に悪い」大気質が予測されています。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.ndtvprofit.com/india/delhi-with-average-aqi-of-307-2026-sees-second-best-january-in-five-years-10917609" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://codemanship.wordpress.com/wp-content/uploads/2026/01/image-19-e1769763735430.png" alt="Coding Is When We're Least Productive" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://codemanship.wordpress.com/2026/01/30/coding-is-when-were-least-productive/" target="_blank">Coding Is When We're Least Productive</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Wordpress.com</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> ソフトウェア開発において、コードを書いている時が最も生産性が低いという主張を展開する記事です。管理者はコード量を生産性の指標とみなしがちですが、AI時代においてもこの考え方は誤りであるとしています。真の生産性は、コードの量ではなく問題解決や...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://codemanship.wordpress.com/2026/01/30/coding-is-when-were-least-productive/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://opengraph.githubassets.com/932ff85d9a745fa2970a85c44859090a0fa140bdb8aa1aff911129f4cf0635eb/diggerhq/opensandbox" alt="Show HN: Open Sandbox – an open-source self-hostable Linux sandbox for AI agents" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://github.com/diggerhq/opensandbox" target="_blank">Show HN: Open Sandbox – an open-source self-hostable Linux sandbox for AI agents</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Github.com</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Open Sandboxは、AIエージェント向けのオープンソースLinuxサンドボックス環境で、Rustで実装されています。マイクロVMではなくプロセスレベルのサンドボックス化を使用し、名前空間の分離やリソース制限機能を備えた隔離環境でコマ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://github.com/diggerhq/opensandbox" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agentic-sdlc/2.7.5/" target="_blank">agentic-sdlc 2.7.5</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AI搭載のソフトウェア開発ライフサイクル（SDLC）フレームワーク「agentic-sdlc」のバージョン2.7.5がリリースされました。このフレームワークは、自己学習機能、自動化されたワークフロー、インテリジェントな知識...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agentic-sdlc/2.7.5/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://cdn.mos.cms.futurecdn.net/XnvRxzuQ2sVDUKDvucroaH-1779-80.png" alt="Google's new AI 'world model' has seemingly spooked videogame investors, but it's hard to know what it will actually lead to" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.pcgamer.com/software/ai/google-project-genie-prototype-launch/" target="_blank">Google's new AI 'world model' has seemingly spooked videogame investors, but it's hard to know what it will actually lead to</a></h3>
+                    <div class="card-meta">
+                        <span>📰 PC Gamer</span>
+                        <span>📅 2026-01-31</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Googleが今週発表した新しいAI「ワールドモデル」により、UnityやTake-Twoなどのゲーム関連企業の株価が下落した。このAIは自動生成される「世界」を作り出すが、実際にどのような影響をもたらすかは不透明な状況で...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.pcgamer.com/software/ai/google-project-genie-prototype-launch/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026年02月01日 AI News Daily | Powered by NewsAPI & Claude</p>
+    </footer>
+</body>
+</html>
