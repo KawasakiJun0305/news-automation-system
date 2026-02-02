@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Daily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* ヘッダー */
+        header {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .masthead {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            text-align: center;
+        }
+
+        .masthead h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .masthead .date-info {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        /* メインコンテンツ */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ヒーロー記事 */
+        .hero-article {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .hero-article:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-article:hover .hero-image {
+            transform: scale(1.03);
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+
+        .hero-content {
+            padding: 40px;
+        }
+
+        .hero-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #2c3e50;
+        }
+
+        .hero-content h2 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .hero-content h2 a:hover {
+            color: #3498db;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+
+        .hero-summary {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .hero-read-more {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .hero-read-more:hover {
+            background: #2980b9;
+            transform: translateX(5px);
+        }
+
+        /* カードグリッド */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            flex-grow: 0;
+        }
+
+        .card h3 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .card h3 a:hover {
+            color: #3498db;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+
+        .card-summary {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .card-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .card-link:hover {
+            color: #2980b9;
+        }
+
+        /* フッター */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            margin-top: 80px;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+            }
+
+            .hero-image-container {
+                height: 300px;
+            }
+
+            .hero-content {
+                padding: 25px;
+            }
+
+            .hero-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-image-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="masthead">
+            <h1>AI News Daily</h1>
+            <div class="date-info">
+                2026年02月02日 02:40 | 総記事数: 20
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- ヒーロー記事（1件目のみ） -->
+        <article class="hero-article">
+            <div class="hero-image-container">
+                
+                <div class="hero-placeholder">📰</div>
+                
+            </div>
+            <div class="hero-content">
+                <h2><a href="https://pypi.org/project/npcsh/1.1.22/" target="_blank">npcsh 1.1.22</a></h2>
+                <div class="hero-meta">
+                    <span>📰 Pypi.org</span>
+                    <span>📅 2026-02-01 02:38</span>
+                    <span>🌐 EN</span>
+                </div>
+                
+                <p class="hero-summary"><strong>要約:</strong> **要約：**
+
+npcsh 1.1.22は、AIエージェントを新しい方法で活用するためのコマンドラインツールキットです。サイトの必須コンポーネントが読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が原因の可能性があるため、接続確認や広告ブロッカーの無効化が推奨されています。</p>
+                
+                
+                <p class="hero-description">npcsh is a command-line toolkit for using AI agents in novel ways.</p>
+                
+                <a href="https://pypi.org/project/npcsh/1.1.22/" target="_blank" class="hero-read-more">続きを読む →</a>
+            </div>
+        </article>
+        
+
+        <!-- その他の記事（カードグリッド） -->
+        <div class="cards-grid">
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/cloudbrain-modules/1.0.1/" target="_blank">cloudbrain-modules 1.0.1</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+CloudBrain Modules（バージョン1.0.1）というAIブログおよびコミュニティプラットフォームに関する記事です。サイトの一部が読み込めない技術的な問題が発生しており、ブラウザ拡張機能、ネットワーク問題、また...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/cloudbrain-modules/1.0.1/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/cloudbrain-client/1.0.1/" target="_blank">cloudbrain-client 1.0.1</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+CloudBrain Client 1.0.1は、AI連携とコミュニケーションシステムです。サイトの必須部分が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が原因の可能性があるとのこ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/cloudbrain-client/1.0.1/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://images.cointelegraph.com/cdn-cgi/image/f=auto,onerror=redirect,w=1200/https://s3.cointelegraph.com/uploads/2026-02/019c1683-c90c-7bd9-803b-4737913ec04e.jpg" alt="SOL drops to $95 as Bitcoin, AI stocks and gold sell off: Will traders buy the dip?" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://cointelegraph.com/news/sol-drops-to-95-as-bitcoin-ai-stocks-and-gold-sell-off-will-traders-buy-the-dip" target="_blank">SOL drops to $95 as Bitcoin, AI stocks and gold sell off: Will traders buy the dip?</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Cointelegraph</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+ソラナ(SOL)は95ドルまで下落し、2025年4月以来の安値を記録した。ビットコイン、AI関連株、金などの資産も同時に売られており、テクノロジーセクターのレイオフやAI収益への懸念が市場全体に影響を与えている。しかし、ソ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://cointelegraph.com/news/sol-drops-to-95-as-bitcoin-ai-stocks-and-gold-sell-off-will-traders-buy-the-dip" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/pai-agent-sdk/0.13.0/" target="_blank">pai-agent-sdk 0.13.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Pydantic AIを使用してAIエージェントを構築するためのアプリケーションフレームワーク「pai-agent-sdk」のバージョン0.13.0がリリースされました。このSDKは、環境の抽象化、セッション管理、階層的な...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/pai-agent-sdk/0.13.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/jleechanorg-orchestration/0.1.33/" target="_blank">jleechanorg-orchestration 0.1.33</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+「jleechanorg-orchestration 0.1.33」は、tmuxベースのインタラクティブなAI CLIラッパーおよびマルチエージェント・オーケストレーション・システムです。サイトの一部が読み込めない問題が発...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/jleechanorg-orchestration/0.1.33/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agmem/0.1.1/" target="_blank">agmem 0.1.1</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+「agmem 0.1.1」は、AIエージェントの記憶を管理するバージョン管理システムで、「AI用のGit」として機能します。サイトの一部が読み込めない技術的な問題が発生しており、ブラウザ拡張機能や接続設定の確認が必要とされ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agmem/0.1.1/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agmem/" target="_blank">agmem added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AIエージェントのメモリー管理システム「agmem」がPyPI（Pythonパッケージリポジトリ）に追加されました。このシステムは「AIエージェント向けのGit」として、エージェントの記憶をバージョン管理する機能を提供しま...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agmem/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://www.livemint.com/lm-img/img/2026/02/01/1600x900/logo/NVIDIA-TAIWAN--9_1769911397110_1769911411911.JPG" alt="Nvidia H-1B salary data emerges as AI boom fuels record pay for top talent - How much did they pay employees in 2025?" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.livemint.com/companies/nvidia-h-1b-salary-data-emerges-as-ai-boom-fuels-record-pay-for-top-talent-how-much-did-they-pay-employees-in-2025-11769910937751.html" target="_blank">Nvidia H-1B salary data emerges as AI boom fuels record pay for top talent - How much did they pay employees in 2025?</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Livemint</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+NvidiaはAIブームの最大の受益者となり、株価高騰により時価総額は4.6兆ドルを超え、多くの従業員が株式の値上がりで億万長者になりました。同社は少数精鋭の組織ながら、AI人材獲得競争を反映して2025年のH-1Bビザ申...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.livemint.com/companies/nvidia-h-1b-salary-data-emerges-as-ai-boom-fuels-record-pay-for-top-talent-how-much-did-they-pay-employees-in-2025-11769910937751.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/symderive/0.6.3/" target="_blank">symderive 0.6.3</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+symderive 0.6.3は、AIエージェントと数学的計算のための独立した記号演算エンジンです。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が原因の可能性があるた...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/symderive/0.6.3/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://www.nzherald.co.nz/resizer/v2/OYMHF7FHPZDSFDK26P6G4IE7PY.jpg?auth=7e5906ca3a750c36c4bc2e8832496a24f8f0d8efcd7345a04fd4f0e2726bcaf3&width=1200&height=675&quality=70&smart=true" alt="Official Information Act: How a transparency law was hollowed out - David Harvey" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.nzherald.co.nz/business/official-information-act-how-a-transparency-law-was-hollowed-out-david-harvey/premium/X7FGOOBDGNHLDDECH43RKL6E5M/" target="_blank">Official Information Act: How a transparency law was hollowed out - David Harvey</a></h3>
+                    <div class="card-meta">
+                        <span>📰 New Zealand Herald</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+ニュージーランドの情報公開法(Official Information Act)は、当初民主的な説明責任を支える憲法的措置として位置づけられていたが、現在では当局が遅延、期限延長、様々な戦術を用いることで、法の本来の意図が...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.nzherald.co.nz/business/official-information-act-how-a-transparency-law-was-hollowed-out-david-harvey/premium/X7FGOOBDGNHLDDECH43RKL6E5M/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://www.bleepstatic.com/content/hl-images/2023/03/24/ChatGPT-headpic.jpg" alt="OpenAI says you can trust ChatGPT answers, as it kicks off ads rollout preparation" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.bleepingcomputer.com/news/artificial-intelligence/openai-says-you-can-trust-chatgpt-answers-as-it-kicks-off-ads-rollout-preparation/" target="_blank">OpenAI says you can trust ChatGPT answers, as it kicks off ads rollout preparation</a></h3>
+                    <div class="card-meta">
+                        <span>📰 BleepingComputer</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> OpenAIがChatGPTの無料版と月額8ドルのGoアカウント向けに広告のテスト配信を開始しており、少なくともAndroid版で展開の初期兆候が確認されています。同社は広告導入の準備を進めながら、ChatGPTの回答の信頼性を強調していま...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.bleepingcomputer.com/news/artificial-intelligence/openai-says-you-can-trust-chatgpt-answers-as-it-kicks-off-ads-rollout-preparation/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/empathy-framework/5.3.0/" target="_blank">empathy-framework 5.3.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+empathy-framework 5.3.0は、実際のLLMエージェント実行機能を持つAIコラボレーションフレームワークで、70-85%のコスト削減を実現する段階的エスカレーション機能を搭載しています。Socraticエ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/empathy-framework/5.3.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://moltyoverflow.com/og.png" alt="Show HN: Molty Overflow – Stack Overflow for AI Agents" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://moltyoverflow.com" target="_blank">Show HN: Molty Overflow – Stack Overflow for AI Agents</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Moltyoverflow.com</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> 「Molty Overflow」は、AIエージェント向けのStack Overflowのようなナレッジグラフで、ツール呼び出しの失敗や認証バグなどの問題解決を支援します。エージェントが繰り返しエラーに遭遇した際に検索可能で、再試行やループに...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://moltyoverflow.com" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agent-os-kernel/1.2.0/" target="_blank">agent-os-kernel 1.2.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+自律型AIエージェントを管理するための「agent-os-kernel 1.2.0」がリリースされました。このカーネルアーキテクチャは、Nexus Trust Exchangeを用いてAIエージェントのガバナンスを実現しま...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agent-os-kernel/1.2.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://mf.b37mrtl.ru/files/2026.02/article/697eb07e85f5400dc05ea07c.jpg" alt="Pentagon wants killer AI without safeguards – Reuters" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.rt.com/news/631817-pentagon-anthropic-ai-guardrails/" target="_blank">Pentagon wants killer AI without safeguards – Reuters</a></h3>
+                    <div class="card-meta">
+                        <span>📰 RT</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> 米国国防総省とAI開発企業Anthropic社の間で、軍事用AI システムの使用制限をめぐり対立が生じています。国防総省は自律型兵器を含む軍事目的でのAI利用に対し、Anthropic社が設けている安全制限の撤廃を求めているとされています。...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.rt.com/news/631817-pentagon-anthropic-ai-guardrails/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/fastapi-fullstack/0.1.18/" target="_blank">fastapi-fullstack 0.1.18</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+fastapi-fullstack 0.1.18は、FastAPIとNext.jsを組み合わせたフルスタック開発用のテンプレートジェネレーターです。PydanticAI/LangChainエージェント、WebSocketス...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/fastapi-fullstack/0.1.18/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img.digitimes.com/newsshow/20260201pd200_files/3_2b.jpg" alt="The AI "A-List": NVIDIA CEO hosts high-stakes summit with tech giants behind the global AI boom" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.digitimes.com/news/a20260201PD200/ceo-jensen-huang-taiwan-taipei-pcb.html" target="_blank">The AI "A-List": NVIDIA CEO hosts high-stakes summit with tech giants behind the global AI boom</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Digitimes</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> NVIDIAのジェンセン・ファンCEOが台北で開催したAI業界の重要サミットに、中国のプリント基板大手企業の会長が唯一の中国人幹部として招待されました。世界的な貿易摩擦が高まる中、グローバルAIブームを牽引するテック大手企業が集結した「兆ド...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.digitimes.com/news/a20260201PD200/ceo-jensen-huang-taiwan-taipei-pcb.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static.toiimg.com/thumb/msid-127830924,width-1280,height-720,imgsize-13076,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg" alt="Did AI take your job? Or was it just ‘AI-washing’?" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://timesofindia.indiatimes.com/world/us/did-ai-take-your-job-or-was-it-just-ai-washing/articleshow/127830927.cms" target="_blank">Did AI take your job? Or was it just ‘AI-washing’?</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+企業が従業員を解雇する理由は様々で、財務目標の未達成、過剰雇用、関税の影響、大口顧客の喪失などが挙げられます。記事はAIを理由にした解雇が実際のAI導入によるものか、それとも「AI-washing（AI導入を口実にした偽装...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://timesofindia.indiatimes.com/world/us/did-ai-take-your-job-or-was-it-just-ai-washing/articleshow/127830927.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/pipecat-ai-mcp-server/0.0.8/" target="_blank">pipecat-ai-mcp-server 0.0.8</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-01</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AIエージェント向けの「Pipecat MCP server」バージョン0.0.8がリリースされました。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が原因の可能性があ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/pipecat-ai-mcp-server/0.0.8/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026年02月02日 AI News Daily | Powered by NewsAPI & Claude</p>
+    </footer>
+</body>
+</html>
