@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Daily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* ヘッダー */
+        header {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .masthead {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            text-align: center;
+        }
+
+        .masthead h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .masthead .date-info {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        /* メインコンテンツ */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ヒーロー記事 */
+        .hero-article {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .hero-article:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-article:hover .hero-image {
+            transform: scale(1.03);
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+
+        .hero-content {
+            padding: 40px;
+        }
+
+        .hero-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #2c3e50;
+        }
+
+        .hero-content h2 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .hero-content h2 a:hover {
+            color: #3498db;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+
+        .hero-summary {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .hero-read-more {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .hero-read-more:hover {
+            background: #2980b9;
+            transform: translateX(5px);
+        }
+
+        /* カードグリッド */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            flex-grow: 0;
+        }
+
+        .card h3 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .card h3 a:hover {
+            color: #3498db;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+
+        .card-summary {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .card-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .card-link:hover {
+            color: #2980b9;
+        }
+
+        /* フッター */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            margin-top: 80px;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+            }
+
+            .hero-image-container {
+                height: 300px;
+            }
+
+            .hero-content {
+                padding: 25px;
+            }
+
+            .hero-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-image-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="masthead">
+            <h1>AI News Daily</h1>
+            <div class="date-info">
+                2026年02月10日 02:50 | 総記事数: 19
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- ヒーロー記事（1件目のみ） -->
+        <article class="hero-article">
+            <div class="hero-image-container">
+                
+                <div class="hero-placeholder">📰</div>
+                
+            </div>
+            <div class="hero-content">
+                <h2><a href="https://pypi.org/project/statebase/0.3.0/" target="_blank">statebase 0.3.0</a></h2>
+                <div class="hero-meta">
+                    <span>📰 Pypi.org</span>
+                    <span>📅 2026-02-09 02:48</span>
+                    <span>🌐 EN</span>
+                </div>
+                
+                <p class="hero-summary"><strong>要約:</strong> **要約：**
+
+Statebase 0.3.0は、本番環境のAIエージェントのための信頼性レイヤーを提供するツールです。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク接続、または広告ブロッカーが原因の可能性があります。</p>
+                
+                
+                <p class="hero-description">The Reliability Layer for Production AI Agents</p>
+                
+                <a href="https://pypi.org/project/statebase/0.3.0/" target="_blank" class="hero-read-more">続きを読む →</a>
+            </div>
+        </article>
+        
+
+        <!-- その他の記事（カードグリッド） -->
+        <div class="cards-grid">
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://variety.com/wp-content/uploads/2026/02/Benson-Ben.jpg?w=1000&h=563&crop=1" alt="Super Bowl Ad Review: Even A.I. Companies Aim for Fun Over Frowns in ‘Joyful’ Commercial Scramble" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://variety.com/2026/tv/news/super-bowl-ad-review-commercials-fun-over-frowns-joyful-1236656545/" target="_blank">Super Bowl Ad Review: Even A.I. Companies Aim for Fun Over Frowns in ‘Joyful’ Commercial Scramble</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Variety</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> スーパーボウルの広告は、今年は深刻なトーンを避け、視聴者を楽しませることに重点を置いた内容が多く見られました。AI企業を含む多くの広告主が、有名人を起用した明るく活気のあるシナリオを採用し、視聴者に好感を持ってもらうことを目指しました。従来...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://variety.com/2026/tv/news/super-bowl-ad-review-commercials-fun-over-frowns-joyful-1236656545/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static0.srcdn.com/wordpress/wp-content/uploads/2026/01/jibaro-in-love-death-and-robots.jpg?w=1600&h=900&fit=crop" alt="10 Best Sci-Fi Shows On Netflix" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://screenrant.com/best-sci-fi-tv-shows-on-netflix/" target="_blank">10 Best Sci-Fi Shows On Netflix</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Screen Rant</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Netflixでは、高評価の新作から見逃されがちな傑作まで、優れたSF番組が配信されています。SFは想像力豊かで多様性に富むジャンルであり、Netflixはこれまでに制作された最高のSF番組の数々をストリーミングで提供して...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://screenrant.com/best-sci-fi-tv-shows-on-netflix/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://www.yankodesign.com/images/design_news/2026/02/6-reasons-why-apple-needs-to-build-a-clamshell-iphone-flip-and-1-reason-it-shouldnt/iphone_flip_foldable_1.jpeg" alt="6 Reasons Why Apple Needs to Build a Clamshell iPhone Flip (And 1 Reason It Shouldn’t)" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.yankodesign.com/2026/02/08/6-reasons-why-apple-needs-to-build-a-clamshell-iphone-flip-and-1-reason-it-shouldnt/" target="_blank">6 Reasons Why Apple Needs to Build a Clamshell iPhone Flip (And 1 Reason It Shouldn’t)</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Yanko Design</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Appleが折りたたみ式クラムシェル型iPhoneを開発すべき6つの理由と、開発すべきでない1つの理由を論じた記事です。iPhone 13 Miniは熱心なファンがいたものの、大画面を求めるユーザーが多数派だったため廃止さ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.yankodesign.com/2026/02/08/6-reasons-why-apple-needs-to-build-a-clamshell-iphone-flip-and-1-reason-it-shouldnt/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://bl-i.thgim.com/public/incoming/mksoh5/article70609494.ece/alternates/LANDSCAPE_1200/2025-11-19T054404Z_1041360960_RC25ZHAHJJWB_RTRMADP_3_FRACTAL-ANALYTICS-INTERVIEW-CEO.JPG" alt="Fractal Analytics IPO opens at ₹857-900; issue size ₹2,834 crore" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.thehindubusinessline.com/markets/fractal-analytics-ipo-opens-at-857-900-issue-size-2834-crore/article70609485.ece" target="_blank">Fractal Analytics IPO opens at ₹857-900; issue size ₹2,834 crore</a></h3>
+                    <div class="card-meta">
+                        <span>📰 BusinessLine</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> インドの純粋なAI企業であるFractal Analytics社が、1株857-900ルピーの価格帯で2,834クローレルピー（約283億円）規模のIPO（新規株式公開）を開始しました。アンカー投資家からの強い需要に支えられており、調達資金...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.thehindubusinessline.com/markets/fractal-analytics-ipo-opens-at-857-900-issue-size-2834-crore/article70609485.ece" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://a5.behance.net/1b036cff75a483d1e284af9ffe9f4cafbcf31ae4/img/site/generic-share.png" alt="Brand Designer" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.behance.net/joblist/341047/Brand-Designer" target="_blank">Brand Designer</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Behance.net</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Supersideが社内マーケティングチーム向けに、広告とブランドデザインの経験豊富なシニア・ブランドマーケティングデザイナーを募集しています。高い創造性と優れた制作スキルを持つ人材を求めている求人案件です。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.behance.net/joblist/341047/Brand-Designer" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://pypi.org/static/images/twitter.abaf4b19.webp" alt="iflow-mcp_qianjietech-agentskill-mcp added to PyPI" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/iflow-mcp_qianjietech-agentskill-mcp/" target="_blank">iflow-mcp_qianjietech-agentskill-mcp added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+MCP対応のエージェントアプリケーションで、Anthropic社の公式Claude Agent Skillsを利用可能にする汎用MCPサーバーがPyPIに追加されました。このサーバーは段階的開示（progressive d...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/iflow-mcp_qianjietech-agentskill-mcp/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://dims.apnews.com/dims4/default/bbeffaf/2147483647/strip/true/crop/4000x2665+0+3/resize/980x653!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fa6%2F9e%2F80e2a061fb6b5c3a760806fc9be9%2F21cefd72ebd84077bdde21e029027ff0" alt="Japan's Nikkei jumps after Takaichi wins a super majority in parliament" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://apnews.com/article/stocks-markets-japan-trump-election-9b8ca5d0b21d8f2c6d0cb6992e05c112" target="_blank">Japan's Nikkei jumps after Takaichi wins a super majority in parliament</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Associated Press</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> 日本の高市早苗首相率いる与党が国政選挙で3分の2以上の絶対多数を獲得し、東京の日経平均株価は月曜日に4.7%急騰しました。高市首相は市場に好ましい政策を追求すると期待されています。この選挙結果を受けて、投資家の間で日本経済の安定と成長への期...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://apnews.com/article/stocks-markets-japan-trump-election-9b8ca5d0b21d8f2c6d0cb6992e05c112" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://prcdn.freetls.fastly.net/release_image/41550/337/41550-337-eb4f96dd753f6ffe1d39ea99dafda3db-567x425.jpg?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260" alt="Salesforce、2026年版 日本における「働きがいのある会社」ランキングで第3位に" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://prtimes.jp/main/html/rd/p/000000337.000041550.html" target="_blank">Salesforce、2026年版 日本における「働きがいのある会社」ランキングで第3位に</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Prtimes.jp</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> セールスフォース・ジャパンが、Great Place To Work® Institute Japanによる2026年版「働きがいのある会社」ランキングで第3位を獲得しました。同社は1,000社以上が参加する調査で上位にランクインし、5年連...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://prtimes.jp/main/html/rd/p/000000337.000041550.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://prcdn.freetls.fastly.net/release_image/12003/287/12003-287-3ce47d5a32ab31de349418abfe829fc9-1200x630.png?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260" alt="CASTER BIZ accounting、自律型AIエージェント「Claude Cowork Finance AI」の実装に向けた対応を開始" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://prtimes.jp/main/html/rd/p/000000287.000012003.html" target="_blank">CASTER BIZ accounting、自律型AIエージェント「Claude Cowork Finance AI」の実装に向けた対応を開始</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Prtimes.jp</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+キャスターが提供する経理BPaaS「CASTER BIZ accounting」が、Anthropic社の自律型AIエージェント「Claude Cowork Finance AI」の実装に向けた対応を開始した。このAIはP...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://prtimes.jp/main/html/rd/p/000000287.000012003.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://prcdn.freetls.fastly.net/release_image/80230/34/80230-34-78595ea91c60a8298833114c4c0ff43a-3900x2194.jpg?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260" alt="Synflux株式会社、住友金属鉱山「SOLAMENT(R)」によるウェアプロジェクト「HOPE WEAR」に参画" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://prtimes.jp/main/html/rd/p/000000034.000080230.html" target="_blank">Synflux株式会社、住友金属鉱山「SOLAMENT(R)」によるウェアプロジェクト「HOPE WEAR」に参画</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Prtimes.jp</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Synflux株式会社が、住友金属鉱山の機能性素材「SOLAMENT®」を使用したウェアプロジェクト「HOPE WEAR」に参画しました。同社は3DやAI技術を活用した「Algorithmic Couture」の手法で、農業用ウェア「HOP...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://prtimes.jp/main/html/rd/p/000000034.000080230.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://prcdn.freetls.fastly.net/release_image/64235/132/64235-132-ffd06f5f3017886e01f449e2f22acc94-602x452.png?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260" alt="IFS Nexus Black、公益事業向けAIソリューション「Resolve for Utilities」を発表" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://prtimes.jp/main/html/rd/p/000000132.000064235.html" target="_blank">IFS Nexus Black、公益事業向けAIソリューション「Resolve for Utilities」を発表</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Prtimes.jp</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> IFSジャパンが公益事業向けAIソリューション「Resolve for Utilities」を発表しました。この製品は同社のAIプラットフォーム「IFS Nexus Black」をベースに開発され、公益事業者の業務効率化を支援します。DIS...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://prtimes.jp/main/html/rd/p/000000132.000064235.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://dam.mediacorp.sg/image/upload/s--xSfr8RDl--/c_crop,h_576,w_1024,x_0,y_30/c_fill,g_auto,h_676,w_1200/fl_relative,g_south_east,l_mediacorp:cna:watermark:2023-11:afp_watermark_14112023,w_0.1/f_auto,q_auto/v1/mediacorp/cna/image/2026/02/09/000_96ku3cl.jpg?itok=lHxYq7dz" alt="'Flood' of disinformation ahead of Bangladesh election" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.channelnewsasia.com/asia/disinformation-ahead-bangladesh-election-5916721" target="_blank">'Flood' of disinformation ahead of Bangladesh election</a></h3>
+                    <div class="card-meta">
+                        <span>📰 CNA</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> バングラデシュの選挙を前に、オンライン上での選挙操作や虚偽情報の拡散が深刻化しており、当局は偽情報を取り締まる特別部隊を創設しました。研究機関の責任者は、無料のAIツールの普及により、過去と比べて大量のフェイク情報が確認されていると指摘して...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.channelnewsasia.com/asia/disinformation-ahead-bangladesh-election-5916721" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/lollmsbot/0.0.2/" target="_blank">lollmsbot 0.0.2</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+「lollmsbot 0.0.2」というLoLLMSベースの個人向けAIアシスタントがリリースされました。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が原因の可能性が...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/lollmsbot/0.0.2/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img.digitimes.com/newsshow/20260209vl209_files/2_b.jpg" alt="Tower Semiconductor, Nvidia advance 1.6T optical modules for AI data center networking" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.digitimes.com/news/a20260209VL209/tower-semiconductor-nvidia-data-center-infrastructure-photonics.html" target="_blank">Tower Semiconductor, Nvidia advance 1.6T optical modules for AI data center networking</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Digitimes</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> タワーセミコンダクターは、NvidiaとAIデータセンター向けの1.6T光モジュールで協業し、AI向けインフラ事業に参入します。シリコンフォトニクス技術を活用した高速AIネットワーキングの重要技術として位置づけられています。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.digitimes.com/news/a20260209VL209/tower-semiconductor-nvidia-data-center-infrastructure-photonics.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/agent-factory-core/0.3.1/" target="_blank">agent-factory-core 0.3.1</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+「agent-factory-core 0.3.1」は、プラグイン可能なモデルとチャネルを使用してAIエージェントを構築するためのコアライブラリです。サイトの一部が読み込めない技術的な問題が発生しており、ブラウザ拡張機能や...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/agent-factory-core/0.3.1/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/codrsync/1.1.1/" target="_blank">codrsync 1.1.1</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+「codrsync 1.1.1」というツールのリリースに関する記事ですが、サイトの主要部分が読み込めない状態です。ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が原因の可能性があり、接続確認や広告ブロッカーの無効化...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/codrsync/1.1.1/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://assets.cnblogs.com/images/wechat-share.jpg" alt="AI开发-python-langchain框架（1-13 返回xml-格式解析器） - 万笑佛" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.cnblogs.com/yclh/p/19594030" target="_blank">AI开发-python-langchain框架（1-13 返回xml-格式解析器） - 万笑佛</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Cnblogs.com</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> この記事は、Pythonのlangchainフレームワークを使用して、AIモデルからXML形式のデータを返す方法を解説しています。XMLOutputParserを使い、PromptTemplateとChatOpenAIを組み合わせることで、...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://www.cnblogs.com/yclh/p/19594030" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static.internazionale.it/assets/img/internazionale-icon.png" alt="Thailand’s Bhumjaithai prepares for coalition talks after big election win" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.internazionale.it/ultime-notizie-reuters/2026/02/09/thailand-s-bhumjaithai-prepares-for-coalition-talks-after-big-election-win" target="_blank">Thailand’s Bhumjaithai prepares for coalition talks after big election win</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Internazionale.it</span>
+                        <span>📅 2026-02-09</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> タイのアヌティン首相率いるプムジャイタイ党が選挙で予想を上回る勝利を収めました。この結果を受けて、月曜日に保守政治の再編成に向けた連立協議の準備を開始しました。タイの政治情勢に大きな変化が訪れる可能性があります。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.internazionale.it/ultime-notizie-reuters/2026/02/09/thailand-s-bhumjaithai-prepares-for-coalition-talks-after-big-election-win" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026年02月10日 AI News Daily | Powered by NewsAPI & Claude</p>
+    </footer>
+</body>
+</html>
