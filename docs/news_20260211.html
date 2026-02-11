@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Daily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* ヘッダー */
+        header {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .masthead {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            text-align: center;
+        }
+
+        .masthead h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .masthead .date-info {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        /* メインコンテンツ */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ヒーロー記事 */
+        .hero-article {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .hero-article:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-article:hover .hero-image {
+            transform: scale(1.03);
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+
+        .hero-content {
+            padding: 40px;
+        }
+
+        .hero-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #2c3e50;
+        }
+
+        .hero-content h2 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .hero-content h2 a:hover {
+            color: #3498db;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+
+        .hero-summary {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .hero-read-more {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .hero-read-more:hover {
+            background: #2980b9;
+            transform: translateX(5px);
+        }
+
+        /* カードグリッド */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            flex-grow: 0;
+        }
+
+        .card h3 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .card h3 a:hover {
+            color: #3498db;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+
+        .card-summary {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .card-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .card-link:hover {
+            color: #2980b9;
+        }
+
+        /* フッター */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            margin-top: 80px;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+            }
+
+            .hero-image-container {
+                height: 300px;
+            }
+
+            .hero-content {
+                padding: 25px;
+            }
+
+            .hero-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-image-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="masthead">
+            <h1>AI News Daily</h1>
+            <div class="date-info">
+                2026年02月11日 02:47 | 総記事数: 20
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- ヒーロー記事（1件目のみ） -->
+        <article class="hero-article">
+            <div class="hero-image-container">
+                
+                <img src="https://img.digitimes.com/newsshow/20260210pd202_files/2_b.jpg" alt="Asus' AI server push bolsters revenue despite memory shortages" class="hero-image">
+                
+            </div>
+            <div class="hero-content">
+                <h2><a href="https://www.digitimes.com/news/a20260210PD202/revenue-ai-server-asus-2025-2026.html" target="_blank">Asus' AI server push bolsters revenue despite memory shortages</a></h2>
+                <div class="hero-meta">
+                    <span>📰 Digitimes</span>
+                    <span>📅 2026-02-10 02:45</span>
+                    <span>🌐 EN</span>
+                </div>
+                
+                <p class="hero-summary"><strong>要約:</strong> ASUSTek Computerは2026年1月の売上高が679億3600万台湾ドル（21億5000万ドル）となり、前年同月比79.97%増と大幅に増加しました。前月比では2.55%減少したものの、AIサーバー事業の推進がメモリ不足の影響を補い、収益を押し上げました。</p>
+                
+                
+                <p class="hero-description">Asustek Computer Inc. reported group revenue of NT$67.936 billion (US$2.15 billion) for January 2026, a 2.55% decline from December 2025 but a 79.97% increase year over year.</p>
+                
+                <a href="https://www.digitimes.com/news/a20260210PD202/revenue-ai-server-asus-2025-2026.html" target="_blank" class="hero-read-more">続きを読む →</a>
+            </div>
+        </article>
+        
+
+        <!-- その他の記事（カードグリッド） -->
+        <div class="cards-grid">
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.computerweekly.com/ezine/Computer-Weekly/Zooming-in-on-police-technology-plans" target="_blank">Zooming in on police technology plans</a></h3>
+                    <div class="card-meta">
+                        <span>📰 ComputerWeekly.com</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> この記事は実際の本文が提供されておらず、メール登録フォームのエラーメッセージのみが表示されています。タイトルと概要から判断すると、英国内務省が警察部門に導入を目指している技術変革プログラムと、PCハードウェアメーカーのグローバルCIOからの...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.computerweekly.com/ezine/Computer-Weekly/Zooming-in-on-police-technology-plans" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/mcp-feedback-pro/2.6.0/" target="_blank">mcp-feedback-pro 2.6.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AI支援開発向けのMCPサーバー「mcp-feedback-pro」のバージョン2.6.0がリリースされました。Web UIとデスクトップアプリケーションの2つのインターフェースに対応し、インタラクティブなユーザーフィード...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/mcp-feedback-pro/2.6.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/mcp-feedback-pro/" target="_blank">mcp-feedback-pro added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> AI支援開発向けの対話型フィードバックツール「mcp-feedback-pro」がPyPIに追加されました。このツールはWeb UIとデスクトップアプリの2つのインターフェースに対応し、環境を自動検出してクロスプラットフォームで動作します。...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/mcp-feedback-pro/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://prcdn.freetls.fastly.net/release_image/59313/39/59313-39-04e98692c94e13054e58b6d58cb915c8-920x450.png?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260" alt="SEREALが運営する、Fukuoka Growth Nextのインキュベーションプログラム「STARTUP ELITE Bootcamp」。26年2月21日(土)に最終報告会「DEMODAY」を開催" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://prtimes.jp/main/html/rd/p/000000039.000059313.html" target="_blank">SEREALが運営する、Fukuoka Growth Nextのインキュベーションプログラム「STARTUP ELITE Bootcamp」。26年2月21日(土)に最終報告会「DEMODAY」を開催</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Prtimes.jp</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> SEREAL株式会社が運営するFukuoka Growth Nextのインキュベーションプログラム「STARTUP ELITE Bootcamp」が、2026年2月21日に最終報告会「DEMODAY」を開催します。このプログラムは、Prob...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://prtimes.jp/main/html/rd/p/000000039.000059313.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://prcdn.freetls.fastly.net/release_image/92673/28/92673-28-3fd40249d3f64941642ff2edd0bdbf72-1920x1080.png?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260" alt="【β版リリース】Instagram分析『HINOME』、Meta広告出稿まで完結する新機能を2月10日より提供開始。リリース記念で2月末まで全プランで利用可能。 ～リリース記念で特別プランもご用意～" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://prtimes.jp/main/html/rd/p/000000028.000092673.html" target="_blank">【β版リリース】Instagram分析『HINOME』、Meta広告出稿まで完結する新機能を2月10日より提供開始。リリース記念で2月末まで全プランで利用可能。 ～リリース記念で特別プランもご用意～</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Prtimes.jp</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Instagram分析ツール「HINOME」が2月10日より、Meta広告出稿まで完結できる新機能のβ版を提供開始します。リリース記念として2月末まで全プランで新機能が利用可能で、特別プランも用意されています。AI機能を活用した分析から広告...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://prtimes.jp/main/html/rd/p/000000028.000092673.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/mcghidra/2025.12.3/" target="_blank">mcghidra 2025.12.3</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+mcghidra 2025.12.3は、AIを活用したリバースエンジニアリング支援ツールです。Ghidraプラグインとして動作し、HATEOAS REST APIとMCP Pythonブリッジを通じて、デコンパイル、解析、...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/mcghidra/2025.12.3/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/mcghidra/" target="_blank">mcghidra added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AIを活用したリバースエンジニアリングツール「mcghidra」がPyPIに追加されました。これはGhidraプラグインをREST API経由で公開し、Python bridgeを通じてデコンパイル、解析、バイナリ操作を可...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/mcghidra/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://news.ycombinator.com/item?id=46954651" target="_blank">Show HN: Agents-docs-kits – reusable "docs kits" for AI agents</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Hacker News</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> AIエージェントの構築・運用に必要なドキュメント集「agents-docs-kits」というオープンソースのリポジトリが公開されました。このキットには、プロンプトテンプレート、運用手順書、チェックリストなど、すぐに使える再利用可能なドキュメ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://news.ycombinator.com/item?id=46954651" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://bl-i.thgim.com/public/incoming/gwz7q8/article70092536.ece/alternates/LANDSCAPE_1200/IMG_BL1404_Corp_Buzz1_2_1_23E86LN6.jpg" alt="Why TCS, CUB, Marico, GRSE, Shree Refrigerations, HAL, Ceigall, Godrej Agrovet, Axiscades, Anant Raj, UVS Hospitality to remain active in today’s trade" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.thehindubusinessline.com/markets/why-tcs-cub-marico-grse-shree-refrigerations-hal-ceigall-godrej-agrovet-axiscades-anant-raj-uvs-hospitality-to-remain-active-in-todays-trade/article70613640.ece" target="_blank">Why TCS, CUB, Marico, GRSE, Shree Refrigerations, HAL, Ceigall, Godrej Agrovet, Axiscades, Anant Raj, UVS Hospitality to remain active in today’s trade</a></h3>
+                    <div class="card-meta">
+                        <span>📰 BusinessLine</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> インド企業の最新動向として、レッドゾーン社がタタ・コンサルタンシー・サービス（TCS）と製造業近代化のパートナーシップを締結しました。また、シティ・ユニオン銀行が新MD就任の中央銀行承認を取得し、マリコがベトナムのスキンケア企業を買収するな...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.thehindubusinessline.com/markets/why-tcs-cub-marico-grse-shree-refrigerations-hal-ceigall-godrej-agrovet-axiscades-anant-raj-uvs-hospitality-to-remain-active-in-todays-trade/article70613640.ece" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img.digitimes.com/newsshow/20260210pd215_files/1_b.jpg" alt="Zhen Ding Tech sees record January revenue driven by high-end AI applications" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.digitimes.com/news/a20260210PD215/zhen-ding-pcb-ai-applications-revenue.html" target="_blank">Zhen Ding Tech sees record January revenue driven by high-end AI applications</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Digitimes</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+台湾のPCB大手Zhen Ding Technology（ZDT）は、2026年1月に過去最高の売上高を記録しました。従来は第1四半期は消費者向け電子機器の閑散期ですが、高度なAI製品の強い需要により、サーバー、光通信、I...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.digitimes.com/news/a20260210PD215/zhen-ding-pcb-ai-applications-revenue.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/gllm-multimodal-binary/0.3.12/" target="_blank">gllm-multimodal-binary 0.3.12</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+「gllm-multimodal-binary」のバージョン0.3.12がリリースされました。これは生成AI（Gen AI）アプリケーション向けのマルチモーダルコンポーネントを含むライブラリです。記事本文はサイトの読み込み...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/gllm-multimodal-binary/0.3.12/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/attnroute/" target="_blank">attnroute added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AIコーディングアシスタント向けのコンテキストルーティングツール「attnroute」がPyPIに追加されました。このツールは98%以上のトークン削減を実現し、AI利用時の効率化を図ります。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/attnroute/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img.etimg.com/thumb/width-1200,height-900,imgsize-93332,resizemode-75,msid-128138079/tech/artificial-intelligence/these-ai-dreamers-dont-fit-the-stereotype.jpg" alt="These AI dreamers don't fit the stereotype" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/these-ai-dreamers-dont-fit-the-stereotype/articleshow/128138079.cms" target="_blank">These AI dreamers don't fit the stereotype</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> サンフランシスコではAIブームにより、若い起業家たちが殺到し、新たなゴールドラッシュのような状況が生まれています。20代の創業者たちは、豊富な資金を背景にスタートアップを立ち上げ、業務効率化を約束しながら企業価値の向上を追求していますが、一...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/these-ai-dreamers-dont-fit-the-stereotype/articleshow/128138079.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://cointelegraph.com/news/base-app-sunset-creator-rewards-program?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank">Base App sunsets Creator Rewards to double down on trading</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Cointelegraph</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Coinbaseの「Base App」が、取引可能資産に完全に注力するため、クリエイター報酬プログラムとFarcaster連携のソーシャルフィード機能を終了すると発表しました。この戦略的転換により、同アプリは暗号資産の取引機能に集中すること...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://cointelegraph.com/news/base-app-sunset-creator-rewards-program?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img.digitimes.com/newsshow/20260210pd218_files/1_b.jpg" alt="Rumored informal fried chicken dinner signals fast-tracked Nvidia talks on HBM and AI collaboration" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.digitimes.com/news/a20260210PD218/nvidia-sk-group-hbm-jensen-huang.html" target="_blank">Rumored informal fried chicken dinner signals fast-tracked Nvidia talks on HBM and AI collaboration</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Digitimes</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Nvidiaのジェンセン・ファンCEOが2026年2月5日、シリコンバレーでSKグループのトニー・チェ会長と「フライドチキンとビール」の非公式夕食会を開催したと報じられた。この会合は、HBM（高帯域幅メモリ）およびAI分野...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.digitimes.com/news/a20260210PD218/nvidia-sk-group-hbm-jensen-huang.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img.etimg.com/thumb/msid-128137968,width-1200,height-630,imgsize-17836,overlay-etmarkets/articleshow.jpg" alt="Fractal Analytics IPO Day 2: GMP trend, subscription status, and expert views" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://economictimes.indiatimes.com/markets/ipos/fpos/fractal-analytics-ipo-day-2-gmp-trend-subscription-status-and-expert-views/articleshow/128137980.cms" target="_blank">Fractal Analytics IPO Day 2: GMP trend, subscription status, and expert views</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約:**
+
+Fractal Analyticsの2,834クローレルピーのIPOが2日目を迎え、初日は9%の申込率を記録しました。インド初のAI企業のIPOとして注目され、株式は非公式グレーマーケットでプレミアム価格で取引されています...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://economictimes.indiatimes.com/markets/ipos/fpos/fractal-analytics-ipo-day-2-gmp-trend-subscription-status-and-expert-views/articleshow/128137980.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img.digitimes.com/newsshow/20260210vl207_files/2_2b.jpg" alt="Big Tech's debt-fueled race to the top: Alphabet makes 100-year bet on AI dominance" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.digitimes.com/news/a20260210VL207/alphabet-data-bloomberg-expansion-infrastructure.html" target="_blank">Big Tech's debt-fueled race to the top: Alphabet makes 100-year bet on AI dominance</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Digitimes</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Alphabetが、AI事業の積極的拡張のために、かつてない規模で世界の債券市場から資金調達を行っています。これは、Big Tech企業がコンピューティングパワー、データセンター、最先端チップを確保するために、どこまで投資する意志があるかを...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.digitimes.com/news/a20260210VL207/alphabet-data-bloomberg-expansion-infrastructure.html" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://www.zdnet.com/a/img/resize/de14a5562c40e3f80843b307b3ac6afb5ff90976/2024/07/24/23406b4d-e939-4b4b-8196-fc00f2ba2d6b/onyx-boox-page0724-173906.jpg?auto=webp&fit=crop&height=675&width=1200" alt="I didn't expect this Android E Ink tablet to beat my Kindle, but one feature sets it apart" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.zdnet.com/article/onyx-boox-page-android-e-ink-tablet-review/" target="_blank">I didn't expect this Android E Ink tablet to beat my Kindle, but one feature sets it apart</a></h3>
+                    <div class="card-meta">
+                        <span>📰 ZDNet</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Onyx Boox PageというAndroid搭載の電子インクタブレットが、Kindleを上回る性能を発揮しています。KindleやReMarkable 2などの従来の電子インク製品に共通する機能制限を克服し、スマートで多用途なデザインと...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.zdnet.com/article/onyx-boox-page-android-e-ink-tablet-review/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Helpingkidsteens_Social.width-1300.png" alt="Helping kids and teens learn and grow online on Safer Internet Day" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://blog.google/innovation-and-ai/technology/safety-security/safer-internet-day-2026-kids-teens/" target="_blank">Helping kids and teens learn and grow online on Safer Internet Day</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Blog.google</span>
+                        <span>📅 2026-02-10</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+GoogleとYouTubeが「セーファーインターネットデー」に合わせて、子どもや10代の若者向けのオンライン学習と成長支援策を発表しました。YouTubeは10代向けの質の高いコンテンツ原則とクリエイター向けガイドを新た...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://blog.google/innovation-and-ai/technology/safety-security/safer-internet-day-2026-kids-teens/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026年02月11日 AI News Daily | Powered by NewsAPI & Claude</p>
+    </footer>
+</body>
+</html>
