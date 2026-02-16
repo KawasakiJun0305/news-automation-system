@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Daily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* ヘッダー */
+        header {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .masthead {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            text-align: center;
+        }
+
+        .masthead h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .masthead .date-info {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        /* メインコンテンツ */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ヒーロー記事 */
+        .hero-article {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .hero-article:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-article:hover .hero-image {
+            transform: scale(1.03);
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+
+        .hero-content {
+            padding: 40px;
+        }
+
+        .hero-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #2c3e50;
+        }
+
+        .hero-content h2 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .hero-content h2 a:hover {
+            color: #3498db;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+
+        .hero-summary {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .hero-read-more {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .hero-read-more:hover {
+            background: #2980b9;
+            transform: translateX(5px);
+        }
+
+        /* カードグリッド */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            flex-grow: 0;
+        }
+
+        .card h3 a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .card h3 a:hover {
+            color: #3498db;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #95a5a6;
+        }
+
+        .card-summary {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .card-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .card-link:hover {
+            color: #2980b9;
+        }
+
+        /* フッター */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            margin-top: 80px;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+            }
+
+            .hero-image-container {
+                height: 300px;
+            }
+
+            .hero-content {
+                padding: 25px;
+            }
+
+            .hero-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-image-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="masthead">
+            <h1>AI News Daily</h1>
+            <div class="date-info">
+                2026年02月16日 02:39 | 総記事数: 20
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- ヒーロー記事（1件目のみ） -->
+        <article class="hero-article">
+            <div class="hero-image-container">
+                
+                <div class="hero-placeholder">📰</div>
+                
+            </div>
+            <div class="hero-content">
+                <h2><a href="https://pypi.org/project/cryptoagent-ai/" target="_blank">cryptoagent-ai added to PyPI</a></h2>
+                <div class="hero-meta">
+                    <span>📰 Pypi.org</span>
+                    <span>📅 2026-02-15 02:37</span>
+                    <span>🌐 EN</span>
+                </div>
+                
+                <p class="hero-summary"><strong>要約:</strong> **要約：**
+
+PyPIに「cryptoagent-ai」が追加されました。これは、独自のウォレットを所有し、EVMチェーン上で取引を行う自律型AIエージェントです。記事本文は技術的な問題により完全に読み込めていません。</p>
+                
+                
+                <p class="hero-description">Autonomous AI agents that own wallets and transact on EVM chains</p>
+                
+                <a href="https://pypi.org/project/cryptoagent-ai/" target="_blank" class="hero-read-more">続きを読む →</a>
+            </div>
+        </article>
+        
+
+        <!-- その他の記事（カードグリッド） -->
+        <div class="cards-grid">
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/cryptoagent-ai/0.1.0/" target="_blank">cryptoagent-ai 0.1.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+「cryptoagent-ai 0.1.0」は、ウォレットを所有しEVMチェーン上で取引を行う自律型AIエージェントです。サイトの一部が読み込めない技術的な問題が発生しており、ブラウザ拡張機能やネットワーク設定の確認が推奨...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/cryptoagent-ai/0.1.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/ai-crypto-tool/" target="_blank">ai-crypto-tool added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+PyPIに「ai-crypto-tool」という新しいツールが追加されました。これは、EVMチェーン上でウォレットを所有し取引を行う自律型AIエージェントを実現するものです。ただし、記事の本文はサイトの読み込みエラーにより...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/ai-crypto-tool/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://dam.mediacorp.sg/image/upload/s--segk_bRb--/c_fill,g_auto,h_676,w_1200/fl_relative,g_south_east,l_mediacorp:cna:watermark:2024-04:reuters_1,w_0.1/f_auto,q_auto/v1/one-cms/core/2026-02-15T022638Z_1_LYNXMPEM1E00W_RTROPTP_3_USA-TRUMP-BUYBACKS-DEFENSE.JPG?itok=umkPHOjZ" alt="Pentagon threatens to cut off Anthropic in AI safeguards dispute, Axios reports" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.channelnewsasia.com/business/pentagon-threatens-cut-anthropic-in-ai-safeguards-dispute-axios-reports-5932441" target="_blank">Pentagon threatens to cut off Anthropic in AI safeguards dispute, Axios reports</a></h3>
+                    <div class="card-meta">
+                        <span>📰 CNA</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+米国防総省が、AI企業Anthropicとの関係を断つことを検討している。Axiosの報道によると、Anthropicが米軍によるAIモデルの使用に一定の制限を維持することを主張しているためだという。両者の間でAIの安全保...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.channelnewsasia.com/business/pentagon-threatens-cut-anthropic-in-ai-safeguards-dispute-axios-reports-5932441" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/mcp-server-toolkit/0.1.0/" target="_blank">mcp-server-toolkit 0.1.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AIアシスタント向けの本番環境対応MCPサーバー「mcp-server-toolkit 0.1.0」がリリースされました。データベース、ファイル、Git、モニタリング、タスク管理、メール、Slack、カレンダーなど9つの機...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/mcp-server-toolkit/0.1.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/mcp-server-toolkit/" target="_blank">mcp-server-toolkit added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+AI アシスタント向けの「mcp-server-toolkit」がPyPIに追加されました。このツールキットには、データベース、ファイル、Git、モニタリング、タスク管理、メール、Slack、カレンダーなど9つの本番環境対...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/mcp-server-toolkit/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static.toiimg.com/thumb/msid-128368569,width-1280,height-720,imgsize-44170,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg" alt="Generative AI ups demand for skilled workers: Study" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://timesofindia.indiatimes.com/india/generative-ai-ups-demand-for-skilled-workers-study/articleshow/128368504.cms" target="_blank">Generative AI ups demand for skilled workers: Study</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+調査によると、生成AI（ジェネレーティブAI）の導入により、エントリーレベルの採用は減少傾向にある一方、スキルを持つ中堅レベルの労働者への需要が増加している。AIの普及が雇用市場の構造を変化させ、より高度なスキルを持つ人材...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://timesofindia.indiatimes.com/india/generative-ai-ups-demand-for-skilled-workers-study/articleshow/128368504.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/pb-spec/0.3.2/" target="_blank">pb-spec 0.3.2</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Plan-Build Spec（pb-spec）のバージョン0.3.2がリリースされました。これはAIコーディングアシスタントのスキルを管理するためのCLIツールです。サイトの一部が読み込めない場合は、ブラウザ拡張機能や接...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/pb-spec/0.3.2/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://english.khabarhub.com/wp-content/uploads/2024/05/Economic-Digest.jpg" alt="Economic Digest: Nepal’s Business News in a Snap" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://english.khabarhub.com/2026/15/535151/" target="_blank">Economic Digest: Nepal’s Business News in a Snap</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Khabarhub.com</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> ネパールの経済ニュースを簡潔にまとめた「エコノミック・ダイジェスト」が発表されました。現在ネパール経済は、銀行の過剰流動性と民間セクターの低迷が特徴となっています。この記事は、ネパールのビジネス動向を読者が素早く理解できるよう、重要な経済情...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://english.khabarhub.com/2026/15/535151/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/the-stepback-mario-back.png?quality=90&strip=all&crop=0%2C10.704835894838%2C100%2C78.590328210325&w=1200" alt="AI can’t make good video game worlds yet, and it might never be able to" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.theverge.com/column/879524/ai-video-game-worlds-project-genie" target="_blank">AI can’t make good video game worlds yet, and it might never be able to</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Verge</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> Google DeepMindが発表した「Project Genie」は、AIによるビデオゲーム世界生成技術の現状を示していますが、その完成度は期待外れな内容となっています。現時点でAIは優れたゲーム世界を生成することができず、技術的な限界...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.theverge.com/column/879524/ai-video-game-worlds-project-genie" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/pptx-mcp/0.8.4/" target="_blank">pptx-mcp 0.8.4</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+pptx-mcp 0.8.4は、AI搭載のPowerPoint生成・編集・レビューツールで、41のツール、32種類のスライドタイプ、12種類のチャート、8種類の図表を提供します。12のブランドプリセット、27のデッキアーキ...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/pptx-mcp/0.8.4/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static.toiimg.com/thumb/msid-128368410,width-1280,height-720,imgsize-44170,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg" alt="India aims to reset AI debate with 1st Global South summit" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://timesofindia.indiatimes.com/india/india-aims-to-reset-ai-debate-with-1st-global-south-summit/articleshow/128368389.cms" target="_blank">India aims to reset AI debate with 1st Global South summit</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> インドが月曜日から開催する初のグローバル・サウスAIサミットで、AIに関する議論の方向性を再設定することを目指しています。注目を集めていたNvidiaのジェンセン・ファンCEOは、インドへの渡航ができず欠席することになりました。数年前には考...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://timesofindia.indiatimes.com/india/india-aims-to-reset-ai-debate-with-1st-global-south-summit/articleshow/128368389.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://img2.doubanio.com/view/subject/l/public/s35384871.jpg" alt="導言——從石刻史料看地域社會的「緣」 (评论: 「境域」と造像)" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://book.douban.com/review/17449201/" target="_blank">導言——從石刻史料看地域社會的「緣」 (评论: 「境域」と造像)</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Douban.com</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> この記事は、石刻史料から地域社会の「縁（つながり）」を考察する研究書「境域と造像」についての評論です。中国の5世紀から14世紀の彫刻や石刻資料を通じて、地域社会の形成や関係性を分析する内容となっています。歴史的な造像研究と地域社会研究を結び...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">JA</span>
+                        <a href="https://book.douban.com/review/17449201/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/synapse-ai-memory/" target="_blank">synapse-ai-memory added to PyPI</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+PyPIに「synapse-ai-memory」という新しいパッケージが追加されました。これは神経科学にインスパイアされたAIエージェント向けのメモリデータベースで、依存関係ゼロの純粋なPythonで実装されています。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/synapse-ai-memory/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/synapse-ai-memory/0.1.0/" target="_blank">synapse-ai-memory 0.1.0</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約:**
+
+AIエージェント向けの神経科学にヒントを得たメモリデータベース「synapse-ai-memory 0.1.0」がリリースされました。このシステムは依存関係ゼロの純粋なPythonで実装されています。サイトの一部が読み込め...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/synapse-ai-memory/0.1.0/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <div class="card-placeholder">📰</div>
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://pypi.org/project/esperanto/2.19.3/" target="_blank">esperanto 2.19.3</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Pypi.org</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> **要約：**
+
+Esperanto 2.19.3は、複数のAIモデルプロバイダーに対応した軽量で本番環境対応の統合インターフェースです。サイトの一部が読み込めない問題が発生しており、ブラウザ拡張機能、ネットワーク問題、またはブラウザ設定が...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://pypi.org/project/esperanto/2.19.3/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://www.nzherald.co.nz/resizer/v2/762JR545LNEAHK35IZARDPXAAI.jpg?auth=95281ce0e42d413be03eb4c8b6348720465bcc9d4f09e7c72db20648d8b20a92&width=1200&height=675&quality=70&focal=1005%2C847&smart=false" alt="Internet regulation: What model is New Zealand really choosing? - David Harvey" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://www.nzherald.co.nz/business/internet-regulation-what-model-is-new-zealand-really-choosing-david-harvey/premium/4JXIK2QLMJHM7LK62VN3GZOJCE/" target="_blank">Internet regulation: What model is New Zealand really choosing? - David Harvey</a></h3>
+                    <div class="card-meta">
+                        <span>📰 New Zealand Herald</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> ニュージーランドでは、デジタル上の発言を規制する3つの異なるモデルが検討されています。同国は粗雑な規制は行わず、既に分類局と内務省が協力してインターネット上の不適切なコンテンツを監視しています。当局は適切な規制モデルの選択について慎重に検討...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://www.nzherald.co.nz/business/internet-regulation-what-model-is-new-zealand-really-choosing-david-harvey/premium/4JXIK2QLMJHM7LK62VN3GZOJCE/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="http://photorumors.com/wp-content/uploads/2026/02/Sony-FX3-II-camera.jpg" alt="Sony FX3 II camera rumors?" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://photorumors.com/2026/02/14/sony-fx3-ii-camera-rumors/" target="_blank">Sony FX3 II camera rumors?</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Photorumors.com</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> ソニーのFX3 IIカメラに関する噂によると、同機は一部のレンタル会社にテスト用として既に配送されているとのことです。FX3のボディの拡張性とFX2の調整可能なEVFを継承し、外観的にはFX2に似ているとされています。</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://photorumors.com/2026/02/14/sony-fx3-ii-camera-rumors/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://static.toiimg.com/thumb/msid-128367679,width-1280,height-720,imgsize-27176,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg" alt="Jason Statham plays himself in Berlin market hot property 'Jason Statham Stole My Bike'" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://timesofindia.indiatimes.com/entertainment/english/hollywood/news/jason-statham-plays-himself-in-berlin-market-hot-property-jason-statham-stole-my-bike/articleshow/128367679.cms" target="_blank">Jason Statham plays himself in Berlin market hot property 'Jason Statham Stole My Bike'</a></h3>
+                    <div class="card-meta">
+                        <span>📰 The Times of India</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> ジェイソン・ステイサムが本人役で出演するアクション・コメディ映画「Jason Statham Stole My Bike」が、デビッド・リーチ監督により製作されます。この作品はアクションとコメディを融合させた独特な内容で、5月から撮影が開始...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://timesofindia.indiatimes.com/entertainment/english/hollywood/news/jason-statham-plays-himself-in-berlin-market-hot-property-jason-statham-stole-my-bike/articleshow/128367679.cms" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-image-container">
+                    
+                    <img src="https://i.abcnewsfe.com/a/b6c2fe44-a14d-4deb-98a8-aa030117153d/260214_wn_ender_hpMain_16x9.jpg?w=992" alt="WATCH: Chasing 'Love' at the Winter Games 2026 on Valentine's Day!" class="card-image">
+                    
+                </div>
+                <div class="card-content">
+                    <h3><a href="https://abcnews.com/video/130178490/" target="_blank">WATCH: Chasing 'Love' at the Winter Games 2026 on Valentine's Day!</a></h3>
+                    <div class="card-meta">
+                        <span>📰 Abcnews.com</span>
+                        <span>📅 2026-02-15</span>
+                    </div>
+                    
+                    <p class="card-summary"><strong>要約:</strong> 2026年冬季オリンピックにおける愛の物語を紹介する記事です。オリンピック村で「最も魅力的な独身者」と呼ばれた選手や世界中が注目したプロポーズ、静かにバレンタインデーを祝うカップルなど、大会期間中のロマンチックなエピソードが取り上げられてい...</p>
+                    
+                    <div class="card-footer">
+                        <span class="tag">EN</span>
+                        <a href="https://abcnews.com/video/130178490/" target="_blank" class="card-link">続きを読む →</a>
+                    </div>
+                </div>
+            </article>
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026年02月16日 AI News Daily | Powered by NewsAPI & Claude</p>
+    </footer>
+</body>
+</html>
